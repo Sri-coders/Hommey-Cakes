@@ -7,6 +7,7 @@ import axios from 'axios';
 import { addToCart } from '../store/cartSlice';
 import RatingStars from '../components/RatingStars';
 import { useToast } from '../components/ToastContext';
+import QuickAddModal from '../components/QuickAddModal';
 
 const Home = () => {
   const [featuredCakes, setFeaturedCakes] = useState([]);
@@ -21,6 +22,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
+  const [activeQuickAddCake, setActiveQuickAddCake] = useState(null);
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -93,18 +95,7 @@ const Home = () => {
   const handleQuickAdd = (cake, e) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(addToCart({
-      cakeId: cake.id,
-      name: cake.name,
-      price: cake.price,
-      discountPrice: cake.discountPrice,
-      imageUrl: cake.images && cake.images[0] ? cake.images[0].imageUrl : '/uploads/product-1.jpg',
-      quantity: 1,
-      weight: 1.00,
-      eggless: cake.eggless,
-      stockQuantity: cake.stockQuantity || 10
-    }));
-    toast.success(`"${cake.name}" added to shopping cart!`);
+    setActiveQuickAddCake(cake);
   };
 
   return (
@@ -367,6 +358,12 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Option selection modal */}
+      <QuickAddModal
+        cake={activeQuickAddCake}
+        isOpen={!!activeQuickAddCake}
+        onClose={() => setActiveQuickAddCake(null)}
+      />
     </motion.div>
   );
 };

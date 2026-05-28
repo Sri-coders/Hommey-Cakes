@@ -8,6 +8,7 @@ import { addToCart } from '../store/cartSlice';
 import { toggleWishlist } from '../store/wishlistSlice';
 import RatingStars from '../components/RatingStars';
 import { useToast } from '../components/ToastContext';
+import QuickAddModal from '../components/QuickAddModal';
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,6 +18,7 @@ const Shop = () => {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const [hearts, setHearts] = useState([]);
   const [cartParticles, setCartParticles] = useState([]);
+  const [activeQuickAddCake, setActiveQuickAddCake] = useState(null);
 
   const [cakes, setCakes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -106,20 +108,8 @@ const Shop = () => {
       toast.warning('This item is currently out of stock!');
       return;
     }
+    setActiveQuickAddCake(cake);
 
-    dispatch(addToCart({
-      cakeId: cake.id,
-      name: cake.name,
-      price: cake.price,
-      discountPrice: cake.discountPrice,
-      imageUrl: cake.images && cake.images[0] ? cake.images[0].imageUrl : '/uploads/product-1.jpg',
-      quantity: 1,
-      weight: 1.00,
-      eggless: cake.eggless,
-      stockQuantity: cake.stockQuantity
-    }));
-    toast.success(`"${cake.name}" added to shopping cart!`);
-    
     // Spawn bakery & cart burst emojis at click coordinates!
     const clickX = e.clientX;
     const clickY = e.clientY;
@@ -509,6 +499,13 @@ const Shop = () => {
           </motion.span>
         ))}
       </AnimatePresence>
+
+      {/* Option selection modal */}
+      <QuickAddModal
+        cake={activeQuickAddCake}
+        isOpen={!!activeQuickAddCake}
+        onClose={() => setActiveQuickAddCake(null)}
+      />
     </motion.div>
   );
 };
