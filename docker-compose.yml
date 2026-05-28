@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: hommey_cakes_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: hommey_secret_pass
+      MYSQL_DATABASE: hommey_cakes
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/database.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - hommey_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hommey_cakes_backend
+    restart: always
+    environment:
+      PORT: 5000
+      NODE_ENV: development
+      CLIENT_URL: http://localhost:5173
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: hommey_secret_pass
+      DB_NAME: hommey_cakes
+      JWT_SECRET: super_secret_hommey_cakes_token_key_2026_antigravity
+      JWT_EXPIRES_IN: 7d
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_USER: sriannamalai2003@gmail.com
+      SMTP_PASS: zjmtmiedvncqhnxq
+      SMTP_FROM: sriannamalai2003@gmail.com
+      RAZORPAY_KEY_ID: rzp_test_StxevbHe3sRNDQ
+      RAZORPAY_KEY_SECRET: Z51Gy9gjUQtYGTnPFCePJRMM
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/uploads:/app/uploads # Persist uploads folder
+    depends_on:
+      - db
+    networks:
+      - hommey_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hommey_cakes_frontend
+    restart: always
+    environment:
+      VITE_BACKEND_URL: http://backend:5000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - hommey_network
+
+volumes:
+  mysql_data:
+
+networks:
+  hommey_network:
+    driver: bridge

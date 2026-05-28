@@ -1,0 +1,69 @@
+# =========================================================================
+# Hommey Cakes - Production Git Ignore Configuration
+# =========================================================================
+
+# -------------------------------------------------------------------------
+# Node.js & Dependencies
+# -------------------------------------------------------------------------
+node_modules/
+jspm_packages/
+web_modules/
+package-lock.json (conditional - lockfiles can be committed, but let's keep it tracked by default unless user requests it)
+
+# -------------------------------------------------------------------------
+# Local Configuration & Sensitive Credentials (DO NOT PUSH TO GITHUB)
+# -------------------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+backend/.env
+frontend/.env
+
+# -------------------------------------------------------------------------
+# Build and Output Bundles
+# -------------------------------------------------------------------------
+dist/
+build/
+out/
+tmp/
+.cache/
+.parcel-cache/
+.eslintcache
+.vite-inspect/
+
+# -------------------------------------------------------------------------
+# Dynamic User Uploads & Media Files
+# -------------------------------------------------------------------------
+# Keep backend/uploads folder structure but ignore all dynamic user/profile uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# -------------------------------------------------------------------------
+# Logs and System Files
+# -------------------------------------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+backend/*.log
+frontend/*.log
+
+# -------------------------------------------------------------------------
+# Toolchains, Portable Environments & OS Metadata
+# -------------------------------------------------------------------------
+node_portable/
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini

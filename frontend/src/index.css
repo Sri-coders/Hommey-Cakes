@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cream text-charcoal font-sans antialiased selection:bg-primary-light selection:text-primary-dark;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-wide;
+  }
+}
+
+/* Custom Premium Glassmorphism & Card Styles */
+.glass {
+  background: rgba(253, 251, 247, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(240, 82, 136, 0.1);
+}
+
+.shadow-premium {
+  box-shadow: 0 10px 30px -15px rgba(240, 82, 136, 0.15);
+}
+
+.shadow-premium-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shadow-premium-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -15px rgba(240, 82, 136, 0.25);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-cream;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/30 rounded-full hover:bg-primary/50 transition-colors;
+}
+
+/* Swiper custom styles overrides */
+.swiper-pagination-bullet-active {
+  background-color: #F05288 !important;
+}
+
+.swiper-button-next, .swiper-button-prev {
+  color: #F05288 !important;
+}
+
+/* Input Fields Transition */
+input, select, textarea {
+  @apply transition-all duration-200 outline-none;
+}
