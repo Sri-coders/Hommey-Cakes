@@ -31,6 +31,7 @@ app.use(helmet({
 const allowedOrigin = [
   process.env.CLIENT_URL,
   'http://localhost:5173',
+  'http://hommey-cakes.vercel.app',
   'https://hommey-cakes.vercel.app'
 ];
 

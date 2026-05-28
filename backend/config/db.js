@@ -2,9 +2,9 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME || 'hommey_cakes',
+  process.env.DB_NAME || 'defaultdb',
   process.env.DB_USER || 'avnadmin',
-  process.env.DB_PASSWORD,
+  process.env.DB_PASSWORD || process.env.DB_PASS || '',
   {
     host: process.env.DB_HOST || 'mysql-5d249c7-hommeycakes.l.aivencloud.com',
     port: process.env.DB_PORT || 11830,
