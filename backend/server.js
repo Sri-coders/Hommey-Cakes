@@ -58,8 +58,10 @@ app.use('/api', apiLimiter);
 
 // 3. Serve Static Assets
 // Serve uploads folder containing cake preview images/videos
+const os = require('os');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads', express.static(path.join(__dirname, '../img/shop')));
+app.use('/uploads', express.static(os.tmpdir())); // Serverless zero-config fallback to serve files from writeable temp folder
 
 // Serve template base assets if required
 const rootImgPath = path.join(__dirname, '../img');

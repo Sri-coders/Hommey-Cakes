@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const cloudinary = require('cloudinary').v2;
 
 // Check if Cloudinary is configured in the environment
@@ -11,18 +12,19 @@ const isCloudinaryConfigured =
 
 const isVercel = process.env.VERCEL || process.env.NODE_ENV === 'production';
 
-// Use memory storage if Cloudinary is configured OR we are on Vercel/Production
-// because serverless functions run on a read-only filesystem.
-const useMemoryStorage = isCloudinaryConfigured || isVercel;
+// Use memory storage only when Cloudinary is actively configured.
+// This allows a seamless offline/zero-config fallback to /tmp when running on Vercel.
+const useMemoryStorage = !!isCloudinaryConfigured;
 
 let storage;
 
 if (useMemoryStorage) {
   storage = multer.memoryStorage();
 } else {
-  // Ensure local uploads folder exists for local development fallback
-  const uploadDir = path.join(__dirname, '../uploads');
-  if (!fs.existsSync(uploadDir)) {
+  // If in production/Vercel but Cloudinary is not configured yet, write to the OS temp folder
+  // to prevent EROFS crash, otherwise write to normal backend/uploads locally.
+  const uploadDir = isVercel ? os.tmpdir() : path.join(__dirname, '../uploads');
+  if (!fs.existsSync(uploadDir) && !isVercel) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
 
