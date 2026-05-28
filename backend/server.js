@@ -28,7 +28,12 @@ app.use(helmet({
 }));
 
 // CORS Configuration
-const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:5173';
+const allowedOrigin = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'https://hommey-cakes.vercel.app'
+];
+
 app.use(cors({
   origin: allowedOrigin,
   credentials: true
@@ -108,16 +113,26 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {
-    // Dynamic database sync. Syncs newly defined columns or associations automatically
-    await sequelize.sync({ alter: true });
-    console.log('Sequelize Models synchronized with MySQL schema.');
+    await sequelize.authenticate();
+    console.log('Database connected successfully.');
 
-    app.listen(PORT, () => {
-      console.log(`Hommey Cakes Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-    });
+    // avoid alter:true in Vercel production
+    // await sequelize.sync();
+
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(PORT, () => {
+        console.log(
+          `Hommey Cakes Server running in ${process.env.NODE_ENV || 'development'
+          } mode on port ${PORT}`
+        );
+      });
+    }
   } catch (error) {
-    console.error('Failed to sync tables and start express server:', error.message);
+    console.error('Database connection failed:', error.message);
   }
 };
 
 startServer();
+
+// Important for Vercel
+module.exports = app;
