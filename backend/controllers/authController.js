@@ -366,8 +366,8 @@ const updateProfileImage = async (req, res, next) => {
       throw new Error('User not found.');
     }
 
-    // Save only filename to profile_image database field
-    const fileName = req.file.filename;
+    // Save only filename or Cloudinary URL to profile_image database field
+    const fileName = req.file.cloudinaryUrl || req.file.filename;
     user.profile_image = fileName;
     await user.save();
 

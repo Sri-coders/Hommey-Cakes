@@ -12,7 +12,7 @@ const upload = require('../middlewares/upload');
 router.get('/', getGallery);
 
 // Admin-Only restricted endpoints (allowing single image or video file upload)
-router.post('/', protect, adminOnly, upload.single('media'), createGalleryItem);
+router.post('/', protect, adminOnly, upload.single('media'), upload.handleCloudinary, createGalleryItem);
 router.delete('/:id', protect, adminOnly, deleteGalleryItem);
 
 module.exports = router;

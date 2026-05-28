@@ -200,7 +200,7 @@ const createCake = async (req, res, next) => {
     if (req.files && req.files.length > 0) {
       const imgRecords = req.files.map(file => ({
         cakeId: cake.id,
-        imageUrl: `/uploads/${file.filename}`,
+        imageUrl: file.cloudinaryUrl || `/uploads/${file.filename}`,
         isVideo: file.mimetype.startsWith('video/')
       }));
       const createdImages = await CakeImage.bulkCreate(imgRecords);
@@ -292,7 +292,7 @@ const updateCake = async (req, res, next) => {
       const previousImages = await CakeImage.findAll({ where: { cakeId: cake.id } });
       for (const img of previousImages) {
         const filePath = path.join(__dirname, '..', img.imageUrl);
-        if (fs.existsSync(filePath) && !img.imageUrl.includes('product-')) {
+        if (!img.imageUrl.startsWith('http') && fs.existsSync(filePath) && !img.imageUrl.includes('product-')) {
           fs.unlinkSync(filePath);
         }
       }
@@ -301,7 +301,7 @@ const updateCake = async (req, res, next) => {
       // Add new uploads
       const imgRecords = req.files.map(file => ({
         cakeId: cake.id,
-        imageUrl: `/uploads/${file.filename}`,
+        imageUrl: file.cloudinaryUrl || `/uploads/${file.filename}`,
         isVideo: file.mimetype.startsWith('video/')
       }));
       await CakeImage.bulkCreate(imgRecords);
@@ -336,7 +336,7 @@ const deleteCake = async (req, res, next) => {
     const images = await CakeImage.findAll({ where: { cakeId: cake.id } });
     for (const img of images) {
       const filePath = path.join(__dirname, '..', img.imageUrl);
-      if (fs.existsSync(filePath) && !img.imageUrl.includes('product-')) {
+      if (!img.imageUrl.startsWith('http') && fs.existsSync(filePath) && !img.imageUrl.includes('product-')) {
         fs.unlinkSync(filePath);
       }
     }

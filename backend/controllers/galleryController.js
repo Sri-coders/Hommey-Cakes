@@ -34,7 +34,7 @@ const createGalleryItem = async (req, res, next) => {
     }
 
     const item = await Gallery.create({
-      mediaUrl: `/uploads/${req.file.filename}`,
+      mediaUrl: req.file.cloudinaryUrl || `/uploads/${req.file.filename}`,
       mediaType: mediaType || (req.file.mimetype.startsWith('video/') ? 'Video' : 'Image'),
       description: description || '',
       isActive: true
@@ -63,7 +63,7 @@ const deleteGalleryItem = async (req, res, next) => {
 
     // Delete static file
     const filePath = path.join(__dirname, '..', item.mediaUrl);
-    if (fs.existsSync(filePath) && !item.mediaUrl.includes('product-')) {
+    if (!item.mediaUrl.startsWith('http') && fs.existsSync(filePath) && !item.mediaUrl.includes('product-')) {
       fs.unlinkSync(filePath);
     }
 

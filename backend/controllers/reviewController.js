@@ -50,7 +50,7 @@ const createReview = async (req, res, next) => {
     const uploadedImages = [];
     if (req.files && req.files.length > 0) {
       req.files.forEach(file => {
-        uploadedImages.push(`/uploads/${file.filename}`);
+        uploadedImages.push(file.cloudinaryUrl || `/uploads/${file.filename}`);
       });
     }
 

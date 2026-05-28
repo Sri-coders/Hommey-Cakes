@@ -23,6 +23,6 @@ router.post('/reset-password', resetPassword);
 // Authorized endpoints
 router.get('/profile', protect, getProfile);
 router.put('/profile', protect, updateProfile);
-router.put('/profile/image', protect, upload.single('profileImage'), updateProfileImage);
+router.put('/profile/image', protect, upload.single('profileImage'), upload.handleCloudinary, updateProfileImage);
 
 module.exports = router;
