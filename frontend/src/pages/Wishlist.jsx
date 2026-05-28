@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -7,12 +7,14 @@ import { toggleWishlist, clearWishlist } from '../store/wishlistSlice';
 import { addToCart } from '../store/cartSlice';
 import RatingStars from '../components/RatingStars';
 import { useToast } from '../components/ToastContext';
+import QuickAddModal from '../components/QuickAddModal';
 
 const Wishlist = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const toast = useToast();
+  const [activeQuickAddCake, setActiveQuickAddCake] = useState(null);
 
   const handleQuickAdd = (cake, e) => {
     e.preventDefault();
@@ -21,19 +23,7 @@ const Wishlist = () => {
       toast.warning('This item is currently out of stock.');
       return;
     }
-
-    dispatch(addToCart({
-      cakeId: cake.id,
-      name: cake.name,
-      price: cake.price,
-      discountPrice: cake.discountPrice,
-      imageUrl: cake.images && cake.images[0] ? cake.images[0].imageUrl : '/uploads/product-1.jpg',
-      quantity: 1,
-      weight: 1.00,
-      eggless: cake.eggless,
-      stockQuantity: cake.stockQuantity
-    }));
-    toast.success(`"${cake.name}" added to shopping cart!`);
+    setActiveQuickAddCake(cake);
   };
 
   const handleRemove = (cake, e) => {
@@ -137,6 +127,12 @@ const Wishlist = () => {
           );
         })}
       </div>
+      {/* Option selection modal */}
+      <QuickAddModal
+        cake={activeQuickAddCake}
+        isOpen={!!activeQuickAddCake}
+        onClose={() => setActiveQuickAddCake(null)}
+      />
     </motion.div>
   );
 };
