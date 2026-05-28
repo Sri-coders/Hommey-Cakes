@@ -160,9 +160,37 @@ CREATE TABLE IF NOT EXISTS `Gallery` (
 
 -- 1. Default Admin & Users
 -- Default Admin Password is 'Admin@HommeyCakes2026', hashed using bcrypt
-INSERT INTO `Users` (`id`, `name`, `email`, `password`, `phone`, `role`, `status`, `address`) VALUES
-(1, 'Sri Annamalai (Admin)', 'sriannamalai2003@gmail.com', '$2a$10$wKzNn8sR3R8p6pGf3Q7VDe92Pszb3s2H9o0B1E/bK2l5OQ47w8l6G', '9345628924', 'Admin', 'Active', 'Hommey Cakes Shop Headquarters, Admin Suite 1, Chennai, TN'),
-(2, 'Demo Customer', 'customer@gmail.com', '$2a$10$wKzNn8sR3R8p6pGf3Q7VDe92Pszb3s2H9o0B1E/bK2l5OQ47w8l6G', '9876543210', 'User', 'Active', '123 Sweet Street, Flour District, Bangalore, KA');
+
+
+INSERT INTO Users 
+(id, name, email, password, phone, role, status, address, createdAt, updatedAt)
+VALUES 
+(
+1, 
+'Sri Annamalai (Admin)', 
+'sriannamalai2003@gmail.com',
+'$2a$10$Gu3x0erfGHLk0cef4yQbguYQPVA587S.tZhEasPoyhzkkFE1jihEi',
+'9345628924',
+'Admin',
+'Active',
+'Hommey Cakes Shop Headquarters, Admin Suite 1, Chennai, TN',
+NOW(),
+NOW()
+),
+(
+2,
+'Demo Customer',
+'customer@gmail.com',
+'$2a$10$wKzNn8sR3R8p6pGf3Q7VDe92Pszb3s2H9o0B1E/bK2l5OQ47w8l6G',
+'9876543210',
+'User',
+'Active',
+'123 Sweet Street, Flour District, Bangalore, KA',
+NOW(),
+NOW()
+);
+
+
 
 -- 2. Cakes Products from Original Template Base
 INSERT INTO `Cakes` (`id`, `name`, `category`, `description`, `price`, `discountPrice`, `stockQuantity`, `flavor`, `weight`, `eggless`, `shape`, `ratings`, `prepTime`, `deliveryTime`, `isFeatured`, `isBestSeller`, `status`) VALUES
